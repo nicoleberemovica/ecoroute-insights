@@ -28,6 +28,8 @@ import {
   TreeDeciduous,
   Gauge,
   Send,
+  Calculator,
+  ArrowRightLeft,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -316,6 +318,62 @@ export default function ShipmentProcessor() {
                   />
                 </div>
 
+                {/* Calculation Details */}
+                {result.calculation_details?.step_by_step_calculation && (
+                  <div className="rounded-xl border bg-card p-6 shadow-sm">
+                    <h3 className="flex items-center gap-2 text-lg font-display font-semibold">
+                      <Calculator className="h-5 w-5 text-primary" />
+                      Calculation Breakdown
+                    </h3>
+                    <p className="mt-1 text-xs text-muted-foreground">
+                      Formula: {result.calculation_details.formula}
+                    </p>
+                    <div className="mt-4 space-y-3">
+                      {result.calculation_details.step_by_step_calculation.calculation_steps?.map(
+                        (step, index) => (
+                          <div
+                            key={index}
+                            className="rounded-lg bg-muted/50 px-4 py-2 text-sm"
+                          >
+                            {step}
+                          </div>
+                        )
+                      )}
+                    </div>
+                    {result.calculation_details.emission_factor_source && (
+                      <p className="mt-4 text-xs text-muted-foreground">
+                        Source: {result.calculation_details.emission_factor_source}
+                      </p>
+                    )}
+                  </div>
+                )}
+
+                {/* Unit Conversion Log */}
+                {result.unit_conversion_log &&
+                  result.unit_conversion_log.conversions_performed?.length > 0 && (
+                    <div className="rounded-xl border bg-card p-6 shadow-sm">
+                      <h3 className="flex items-center gap-2 text-lg font-display font-semibold">
+                        <ArrowRightLeft className="h-5 w-5 text-primary" />
+                        Unit Conversions
+                      </h3>
+                      <p className="mt-1 text-xs text-muted-foreground">
+                        Input units: {result.unit_conversion_log.input_units}
+                      </p>
+                      <div className="mt-3 space-y-2">
+                        {result.unit_conversion_log.conversions_performed.map(
+                          (conversion, index) => (
+                            <div
+                              key={index}
+                              className="rounded-lg bg-muted/50 px-4 py-2 text-sm"
+                            >
+                              {conversion}
+                            </div>
+                          )
+                        )}
+                      </div>
+                    </div>
+                  )}
+
                 {/* Breakdown */}
                 <div className="rounded-xl border bg-card p-6 shadow-sm">
                   <h3 className="text-lg font-display font-semibold">
@@ -354,6 +412,11 @@ export default function ShipmentProcessor() {
                       </div>
                     </div>
                   </div>
+                  {result.emission_breakdown?.emission_factor_source && (
+                    <p className="mt-4 text-xs text-muted-foreground">
+                      Emission factor source: {result.emission_breakdown.emission_factor_source}
+                    </p>
+                  )}
                 </div>
 
                 {/* Trucking Analysis */}
