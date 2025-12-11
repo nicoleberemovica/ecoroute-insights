@@ -319,34 +319,45 @@ export default function ShipmentProcessor() {
                 </div>
 
                 {/* Calculation Details */}
-                {result.calculation_details?.step_by_step_calculation && (
-                  <div className="rounded-xl border bg-card p-6 shadow-sm">
-                    <h3 className="flex items-center gap-2 text-lg font-display font-semibold">
-                      <Calculator className="h-5 w-5 text-primary" />
-                      Calculation Breakdown
-                    </h3>
-                    <p className="mt-1 text-xs text-muted-foreground">
-                      Formula: {result.calculation_details.formula}
-                    </p>
-                    <div className="mt-4 space-y-3">
-                      {result.calculation_details.step_by_step_calculation.calculation_steps?.map(
-                        (step, index) => (
-                          <div
-                            key={index}
-                            className="rounded-lg bg-muted/50 px-4 py-2 text-sm"
-                          >
-                            {step}
-                          </div>
-                        )
-                      )}
+                <div className="rounded-xl border bg-card p-6 shadow-sm">
+                  <h3 className="flex items-center gap-2 text-lg font-display font-semibold">
+                    <Calculator className="h-5 w-5 text-primary" />
+                    Calculation Breakdown
+                  </h3>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Formula: CO₂ (g) = Cargo Weight (tonnes) × Distance (km) × Emission Factor (g/tonne-km)
+                  </p>
+                  <div className="mt-4 space-y-3">
+                    <div className="rounded-lg bg-muted/50 px-4 py-3 text-sm space-y-2">
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Cargo Weight:</span>
+                        <span className="font-medium">{(parseFloat(formData.cargoWeight) / 1000).toFixed(3)} tonnes</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Distance:</span>
+                        <span className="font-medium">{parseFloat(formData.distance).toLocaleString()} km</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-muted-foreground">Emission Factor:</span>
+                        <span className="font-medium">110.7 g CO₂/tonne-km</span>
+                      </div>
                     </div>
-                    {result.calculation_details.emission_factor_source && (
-                      <p className="mt-4 text-xs text-muted-foreground">
-                        Source: {result.calculation_details.emission_factor_source}
-                      </p>
-                    )}
+                    <div className="rounded-lg bg-primary/10 px-4 py-3 text-sm">
+                      <div className="flex justify-between items-center">
+                        <span className="text-muted-foreground">Calculation:</span>
+                        <span className="font-mono text-xs">
+                          {(parseFloat(formData.cargoWeight) / 1000).toFixed(3)} × {parseFloat(formData.distance)} × 110.7
+                        </span>
+                      </div>
+                      <div className="flex justify-between items-center mt-2 pt-2 border-t border-border">
+                        <span className="font-semibold">Total CO₂:</span>
+                        <span className="font-semibold text-primary">
+                          {((parseFloat(formData.cargoWeight) / 1000) * parseFloat(formData.distance) * 110.7).toFixed(2)} g ({(((parseFloat(formData.cargoWeight) / 1000) * parseFloat(formData.distance) * 110.7) / 1000).toFixed(2)} kg)
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                )}
+                </div>
 
 
                 {/* Breakdown */}
