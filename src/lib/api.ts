@@ -57,21 +57,40 @@ async function makeRequest<T>(
 export interface ShipmentEmissionsResponse {
   shipment_id: string;
   total_co2_kg: number;
+  calculation_details?: {
+    formula: string;
+    cargo_weight_used: number;
+    emission_factor_used: number;
+    distance_used: number;
+    units_detected: string;
+    conversion_applied: boolean;
+  };
   emission_breakdown: {
-    transport_mode: string;
-    fuel_consumption: number;
+    truck_type: string;
+    fuel_consumption_liters: number;
     distance_km: number;
-    emission_factor: number;
+    emission_factor_kg_per_km: number;
   };
   efficiency_metrics: {
-    co2_per_kg: number;
+    co2_per_kg_cargo: number;
     co2_per_km: number;
     fuel_efficiency_rating: string;
+    trucking_efficiency_score: number;
+    sources?: {
+      co2_per_kg_cargo: string;
+      co2_per_km: string;
+      fuel_efficiency_rating: string;
+    };
   };
   environmental_impact: {
     impact_level: string;
     carbon_equivalent_trees: number;
-    recommendations: string[];
+    trucking_recommendations: string[];
+  };
+  trucking_analysis?: {
+    optimal_truck_type: string;
+    load_efficiency: number;
+    route_optimization_potential: string;
   };
   summary: string;
 }
