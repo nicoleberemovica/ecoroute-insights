@@ -59,9 +59,15 @@ export interface ShipmentEmissionsResponse {
   total_co2_kg: number;
   calculation_details?: {
     formula: string;
-    cargo_weight_used: number;
-    emission_factor_used: number;
-    distance_used: number;
+    step_by_step_calculation?: {
+      original_weight: string;
+      original_distance: string;
+      converted_weight_kg: number;
+      converted_distance_km: number;
+      emission_factor_kg_per_km: number;
+      calculation_steps: string[];
+    };
+    emission_factor_source: string;
     units_detected: string;
     conversion_applied: boolean;
   };
@@ -70,27 +76,34 @@ export interface ShipmentEmissionsResponse {
     fuel_consumption_liters: number;
     distance_km: number;
     emission_factor_kg_per_km: number;
+    emission_factor_source?: string;
   };
   efficiency_metrics: {
     co2_per_kg_cargo: number;
     co2_per_km: number;
     fuel_efficiency_rating: string;
     trucking_efficiency_score: number;
-    sources?: {
+    calculation_sources?: {
       co2_per_kg_cargo: string;
       co2_per_km: string;
       fuel_efficiency_rating: string;
+      efficiency_score_basis: string;
     };
   };
   environmental_impact: {
     impact_level: string;
     carbon_equivalent_trees: number;
+    trees_calculation_source?: string;
     trucking_recommendations: string[];
   };
   trucking_analysis?: {
     optimal_truck_type: string;
     load_efficiency: number;
     route_optimization_potential: string;
+  };
+  unit_conversion_log?: {
+    input_units: string;
+    conversions_performed: string[];
   };
   summary: string;
 }
