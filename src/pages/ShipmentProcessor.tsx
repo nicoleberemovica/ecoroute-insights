@@ -25,11 +25,10 @@ import {
   Fuel,
   Route,
   CloudRain,
-  TreeDeciduous,
   Gauge,
   Send,
   Calculator,
-  ArrowRightLeft,
+  TrendingDown,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -311,9 +310,10 @@ export default function ShipmentProcessor() {
                     variant="primary"
                   />
                   <MetricCard
-                    title="Carbon Trees"
-                    value={result.environmental_impact?.carbon_equivalent_trees || 0}
-                    icon={<TreeDeciduous className="h-5 w-5" />}
+                    title="CO₂ per km"
+                    value={result.efficiency_metrics?.co2_per_km || 0}
+                    unit="kg"
+                    icon={<TrendingDown className="h-5 w-5" />}
                     variant="success"
                   />
                 </div>
@@ -348,31 +348,6 @@ export default function ShipmentProcessor() {
                   </div>
                 )}
 
-                {/* Unit Conversion Log */}
-                {result.unit_conversion_log &&
-                  result.unit_conversion_log.conversions_performed?.length > 0 && (
-                    <div className="rounded-xl border bg-card p-6 shadow-sm">
-                      <h3 className="flex items-center gap-2 text-lg font-display font-semibold">
-                        <ArrowRightLeft className="h-5 w-5 text-primary" />
-                        Unit Conversions
-                      </h3>
-                      <p className="mt-1 text-xs text-muted-foreground">
-                        Input units: {result.unit_conversion_log.input_units}
-                      </p>
-                      <div className="mt-3 space-y-2">
-                        {result.unit_conversion_log.conversions_performed.map(
-                          (conversion, index) => (
-                            <div
-                              key={index}
-                              className="rounded-lg bg-muted/50 px-4 py-2 text-sm"
-                            >
-                              {conversion}
-                            </div>
-                          )
-                        )}
-                      </div>
-                    </div>
-                  )}
 
                 {/* Breakdown */}
                 <div className="rounded-xl border bg-card p-6 shadow-sm">
