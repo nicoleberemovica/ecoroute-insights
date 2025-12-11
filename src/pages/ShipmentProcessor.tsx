@@ -183,7 +183,7 @@ export default function ShipmentProcessor() {
 
                 <div className="grid gap-4 sm:grid-cols-2">
                   <div className="space-y-2">
-                    <Label htmlFor="transportMode">Transport Mode</Label>
+                    <Label htmlFor="transportMode">Truck Type</Label>
                     <Select
                       value={formData.transportMode}
                       onValueChange={(value) =>
@@ -191,13 +191,15 @@ export default function ShipmentProcessor() {
                       }
                     >
                       <SelectTrigger>
-                        <SelectValue placeholder="Select mode" />
+                        <SelectValue placeholder="Select truck type" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="truck">Truck</SelectItem>
-                        <SelectItem value="rail">Rail</SelectItem>
-                        <SelectItem value="sea">Sea Freight</SelectItem>
-                        <SelectItem value="air">Air Freight</SelectItem>
+                        <SelectItem value="light_duty_truck">Light Duty Truck</SelectItem>
+                        <SelectItem value="medium_duty_truck">Medium Duty Truck</SelectItem>
+                        <SelectItem value="heavy_duty_truck">Heavy Duty Truck</SelectItem>
+                        <SelectItem value="semi_truck">Semi Truck</SelectItem>
+                        <SelectItem value="box_truck">Box Truck</SelectItem>
+                        <SelectItem value="delivery_van">Delivery Van</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
@@ -323,9 +325,9 @@ export default function ShipmentProcessor() {
                     <div className="flex items-center gap-3 rounded-lg bg-muted/50 p-4">
                       <Truck className="h-5 w-5 text-primary" />
                       <div>
-                        <p className="text-xs text-muted-foreground">Mode</p>
-                        <p className="font-medium">
-                          {result.emission_breakdown?.transport_mode || "N/A"}
+                        <p className="text-xs text-muted-foreground">Truck Type</p>
+                        <p className="font-medium capitalize">
+                          {result.emission_breakdown?.truck_type?.replace(/_/g, " ") || "N/A"}
                         </p>
                       </div>
                     </div>
@@ -345,7 +347,7 @@ export default function ShipmentProcessor() {
                       <div>
                         <p className="text-xs text-muted-foreground">Fuel Used</p>
                         <p className="font-medium">
-                          {result.emission_breakdown?.fuel_consumption?.toLocaleString() ||
+                          {result.emission_breakdown?.fuel_consumption_liters?.toLocaleString() ||
                             "N/A"}{" "}
                           L
                         </p>
@@ -353,6 +355,35 @@ export default function ShipmentProcessor() {
                     </div>
                   </div>
                 </div>
+
+                {/* Trucking Analysis */}
+                {result.trucking_analysis && (
+                  <div className="rounded-xl border bg-card p-6 shadow-sm">
+                    <h3 className="text-lg font-display font-semibold">
+                      Trucking Analysis
+                    </h3>
+                    <div className="mt-4 grid gap-4 sm:grid-cols-3">
+                      <div className="rounded-lg bg-muted/50 p-4">
+                        <p className="text-xs text-muted-foreground">Optimal Truck</p>
+                        <p className="font-medium capitalize">
+                          {result.trucking_analysis.optimal_truck_type?.replace(/_/g, " ") || "N/A"}
+                        </p>
+                      </div>
+                      <div className="rounded-lg bg-muted/50 p-4">
+                        <p className="text-xs text-muted-foreground">Load Efficiency</p>
+                        <p className="font-medium">
+                          {result.trucking_analysis.load_efficiency}%
+                        </p>
+                      </div>
+                      <div className="rounded-lg bg-muted/50 p-4">
+                        <p className="text-xs text-muted-foreground">Route Optimization</p>
+                        <p className="font-medium text-sm">
+                          {result.trucking_analysis.route_optimization_potential || "N/A"}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
 
                 {/* Efficiency */}
                 <div className="rounded-xl border bg-card p-6 shadow-sm">
@@ -363,7 +394,7 @@ export default function ShipmentProcessor() {
                     <div className="flex items-center gap-2 rounded-full bg-secondary px-4 py-2">
                       <Gauge className="h-4 w-4 text-secondary-foreground" />
                       <span className="text-sm font-medium">
-                        {result.efficiency_metrics?.co2_per_kg} kg CO₂/kg cargo
+                        {result.efficiency_metrics?.co2_per_kg_cargo} kg CO₂/kg cargo
                       </span>
                     </div>
                     <div className="flex items-center gap-2 rounded-full bg-secondary px-4 py-2">
@@ -371,6 +402,13 @@ export default function ShipmentProcessor() {
                         Rating: {result.efficiency_metrics?.fuel_efficiency_rating}
                       </span>
                     </div>
+                    {result.efficiency_metrics?.trucking_efficiency_score !== undefined && (
+                      <div className="flex items-center gap-2 rounded-full bg-primary/10 px-4 py-2">
+                        <span className="text-sm font-medium text-primary">
+                          Efficiency Score: {result.efficiency_metrics.trucking_efficiency_score}
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
 
@@ -387,9 +425,9 @@ export default function ShipmentProcessor() {
                 {/* Recommendations */}
                 <RecommendationsList
                   recommendations={
-                    result.environmental_impact?.recommendations || []
+                    result.environmental_impact?.trucking_recommendations || []
                   }
-                  title="Environmental Recommendations"
+                  title="Trucking Recommendations"
                 />
               </>
             )}
